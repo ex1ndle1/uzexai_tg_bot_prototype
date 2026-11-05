@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+.env
+.env.*
+data
+*.duckdb
+*.duckdb.wal
+tests
+tests_independent
+uzex_spot_data/*.md

@@ -1,0 +1,75 @@
+{
+  "warning": "Frozen reference metrics computed from uzex_spot_data/*.csv according to README.md. Regenerate only if the registry changes.",
+  "metrics": {
+    "dataset": {
+      "deals_total": 500000,
+      "deals_by_year": {
+        "2022": 84299,
+        "2023": 93985,
+        "2024": 106647,
+        "2025": 115763,
+        "2026": 99306
+      },
+      "deal_date_min": "2022-01-03",
+      "deal_date_max": "2026-10-30",
+      "contracts_total": 6616,
+      "participants_total": 14392,
+      "brokers_total": 120,
+      "usd_rate_days": 1765,
+      "usd_rate_min_date": "2022-01-01",
+      "usd_rate_max_date": "2026-10-31"
+    },
+    "statuses": {
+      "Аннулирован(Не оплачен)": 33719,
+      "Ждёт оплату": 1714,
+      "Заключен": 3954,
+      "Исполнен": 431061,
+      "Исполнен(Частично)": 22648,
+      "Не подписан": 86,
+      "Новый": 964,
+      "Оплачен": 5854
+    },
+    "contract_types": {
+      "Внутренний": 493410,
+      "Экспортный": 6590
+    },
+    "contract_currencies": {
+      "Доллар США": 148,
+      "Узбекский сум": 6468
+    },
+    "aggregates": {
+      "amount_uzs_total": 220477157554431.78,
+      "volume_total": 10440496489.0,
+      "amount_uzs_2024": 45900904000492.14,
+      "deals_2024": 106647,
+      "deals_2025": 115763,
+      "deals_on_2026_10_30": 964,
+      "annulled_deals": 33719,
+      "export_deals": 6590,
+      "new_deals": 964,
+      "fully_delivered_deals": 431061,
+      "partially_delivered_deals": 22648,
+      "wheat_2025_deals": 8580,
+      "wheat_2025_volume": 2347155.0,
+      "wheat_2025_amount_uzs": 9897648670404.0,
+      "wheat_2025_avg_unit_price": 4216870.496582,
+      "cotton_2025_volume": 1976409444.0,
+      "cotton_2025_deals": 33056,
+      "seller_921912462_deals": 1736,
+      "contract_100034_deals": 252,
+      "broker_BK001_seller_deals": 1300,
+      "usd_rate_2025_03_15": 12589.97,
+      "top_region_by_deals": {
+        "region": "Toshkent shahri",
+        "deals": 98435
+      },
+      "top_seller_2024_by_amount_uzs": {
+        "inn": "937937230",
+        "amount_uzs": 2747255541840.0,
+        "deals": 2553
+      },
+      "export_amount_usd_2024": 219306395.35,
+      "export_amount_uzs_2024": 2621400340149.9
+    }
+  }
+}

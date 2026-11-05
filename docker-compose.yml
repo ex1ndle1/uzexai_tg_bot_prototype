@@ -1,0 +1,24 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    image: uzex-agent-api:latest
+    container_name: uzex-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Общий секрет с ботом на Render. Задаётся в .env на ВМ.
+      AGENT_API_TOKEN: ${AGENT_API_TOKEN:?AGENT_API_TOKEN не задан в .env}
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=5)"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

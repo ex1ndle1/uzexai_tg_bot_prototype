@@ -1,0 +1,21 @@
+# Render Blueprint: тонкий Telegram-бот (polling).
+# Ядро агента живёт на Yandex Cloud VM и доступно по AGENT_API_URL.
+services:
+  - type: worker
+    name: uzex-telegram-bot
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements-bot.txt
+    startCommand: python bot.py
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.10
+      - key: BOT_TOKEN
+        sync: false
+      - key: AGENT_API_URL
+        sync: false
+      - key: AGENT_API_TOKEN
+        sync: false
+      - key: AGENT_API_TIMEOUT
+        value: "150"

@@ -1,0 +1,4 @@
+# Тонкий Telegram-бот (Render): без DuckDB и CSV.
+aiogram>=3.13
+httpx>=0.27
+python-dotenv>=1.0
