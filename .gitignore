@@ -10,4 +10,6 @@ __pycache__/
 # Базы данных и конфигурация
 *.db
 *.sqlite3
-.env*
+.env
+.env.vm
+
