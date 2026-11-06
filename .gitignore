@@ -2,7 +2,7 @@
 venv/
 .venv/
 env/
-
+uzex_spot_data/
 # Кэш Python
 __pycache__/
 *.pyc
@@ -10,5 +10,4 @@ __pycache__/
 # Базы данных и конфигурация
 *.db
 *.sqlite3
-.env
-
+.env*

@@ -19,30 +19,15 @@ from aiogram.types import (  # noqa: E402
     Message,
 )
 
+from agent.orchestrator import Agent  # noqa: E402
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("uzex.bot")
 
-
-def build_agent():
-    """На Render — тонкий клиент к API на YC; локально — агент целиком."""
-    api_url = os.getenv("AGENT_API_URL", "").strip()
-    if api_url:
-        from agent.client import RemoteAgent  # noqa: PLC0415
-
-        log.info("Режим бота: удалённый API %s", api_url)
-        return RemoteAgent(base_url=api_url)
-    from agent.orchestrator import Agent  # noqa: PLC0415
-
-    log.info("Режим бота: локальный агент (DuckDB + LLM)")
-    return Agent()
-
-
 router = Router()
-agent = build_agent()
+agent = Agent()
 HISTORY: dict[int, list[dict[str, str]]] = {}
 MAX_HISTORY = 8
-# API принимает элементы истории до 4000 символов (см. agent/api.py).
-HISTORY_CHARS = 4000
 
 WELCOME = (
     "👋 UZEX bitimlar reyestri agenti\n\n"
@@ -114,8 +99,8 @@ async def _reply(message: Message, question: str) -> None:
                   "Извините, произошла ошибка. Попробуйте ещё раз.")
 
     HISTORY[chat_id] = (history + [
-        {"role": "user", "content": question[:HISTORY_CHARS]},
-        {"role": "assistant", "content": answer[:HISTORY_CHARS]},
+        {"role": "user", "content": question},
+        {"role": "assistant", "content": answer},
     ])[-MAX_HISTORY:]
 
     for chunk in split_message(answer):
