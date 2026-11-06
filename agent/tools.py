@@ -924,7 +924,9 @@ TOOL_FUNCS: dict[str, Callable[..., dict[str, Any]]] = {
 def call_tool(name: str, args: dict[str, Any]) -> dict[str, Any]:
     func = TOOL_FUNCS.get(name)
     if func is None:
+        db.record_manual(name, error=f"Неизвестный инструмент: {name}")
         return {"ok": False, "error": f"Неизвестный инструмент: {name}"}
+    db.set_sql_tool(name)
     try:
         result = func(**args)
         return {"ok": True, **result}
@@ -934,3 +936,5 @@ def call_tool(name: str, args: dict[str, Any]) -> dict[str, Any]:
         return {"ok": False, "error": f"Неверные аргументы: {exc}"}
     except Exception as exc:  # не роняем бота из-за одного запроса
         return {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
+    finally:
+        db.set_sql_tool("")

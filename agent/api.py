@@ -54,6 +54,7 @@ class AskRequest(BaseModel):
 
 class AskResponse(BaseModel):
     answer: str
+    queries: list[dict[str, Any]] = Field(default_factory=list)
 
 
 def require_token(x_api_key: str | None = Header(default=None, alias="X-API-Key")) -> None:
@@ -79,7 +80,9 @@ async def ask(payload: AskRequest) -> AskResponse:
     history = [item.model_dump() for item in payload.history]
     log.info("ask chat=%s q=%r", payload.chat_id, payload.question[:120])
     answer = await agent.answer(payload.question, history)
-    return AskResponse(answer=answer)
+    queries = getattr(agent, "last_queries", [])
+    log.info("done chat=%s sql_calls=%s", payload.chat_id, len(queries))
+    return AskResponse(answer=answer, queries=queries)
 
 
 @app.exception_handler(Exception)

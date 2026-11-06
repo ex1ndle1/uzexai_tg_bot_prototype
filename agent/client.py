@@ -32,6 +32,7 @@ class RemoteAgent:
         self.token = token if token is not None else os.getenv("AGENT_API_TOKEN", "").strip()
         self.timeout = timeout or float(os.getenv("AGENT_API_TIMEOUT", "150"))
         self.retries = retries
+        self.last_queries: list[dict[str, Any]] = []
 
     async def answer(self, question: str, history: list[dict[str, str]] | None = None) -> str:
         payload: dict[str, Any] = {"question": question, "history": history or []}
@@ -48,7 +49,9 @@ class RemoteAgent:
                     last_error = f"{type(exc).__name__}: {exc}"
                 else:
                     if resp.status_code == 200:
-                        return resp.json().get("answer", "").strip()
+                        data = resp.json()
+                        self.last_queries = data.get("queries") or []
+                        return data.get("answer", "").strip()
                     if resp.status_code == 401:
                         raise AgentAPIError("API отклонил ключ (401): проверьте AGENT_API_TOKEN")
                     last_error = f"HTTP {resp.status_code}: {resp.text[:200]}"

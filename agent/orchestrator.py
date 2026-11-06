@@ -7,7 +7,7 @@ import logging
 import re
 from typing import Any
 
-from . import llm
+from . import db, llm
 from .prompts import RU_LOCK, SYSTEM_PROMPT, UZ_LOCK
 from .tools import TOOL_SPECS, call_tool
 
@@ -126,12 +126,23 @@ class Agent:
     def __init__(self, max_steps: int = MAX_STEPS) -> None:
         self.max_steps = max_steps
         self._cache: dict[str, str] = {}
+        # SQL-трейс последнего ответа — читают API и кнопка «🔍 SQL» в боте.
+        self.last_queries: list[dict[str, Any]] = []
 
     async def answer(self, question: str, history: list[dict[str, str]] | None = None) -> str:
         key = (question or "").strip().lower()
         if not history and key in self._cache:
+            self.last_queries = [{
+                "tool": "", "sql": "", "params": [], "rows": None,
+                "ms": 0.0, "error": None, "cached": True,
+            }]
             return self._cache[key]
-        result = await self._answer(question, history)
+        buffer: list[dict[str, Any]] = []
+        try:
+            with db.record_queries(buffer):
+                result = await self._answer(question, history)
+        finally:
+            self.last_queries = buffer
         if not history and len(self._cache) < 500:
             self._cache[key] = result
         return result

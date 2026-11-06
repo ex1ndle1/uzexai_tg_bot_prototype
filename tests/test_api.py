@@ -60,6 +60,19 @@ def test_index_page() -> None:
     assert "UZEX" in response.text
 
 
+def test_ask_includes_sql_trace() -> None:
+    response = client.post(
+        "/api/ask",
+        json={"question": "Что за компания с ИНН 921912462?", "chat_id": 2},
+        headers=AUTH,
+    )
+    assert response.status_code == 200, response.text
+    queries = response.json().get("queries")
+    assert isinstance(queries, list), queries
+    assert queries, "ожидали непустой SQL-трейс"
+    assert any(q.get("tool") == "get_company" or "participants" in q.get("sql", "") for q in queries), queries
+
+
 def main() -> None:
     tests = [value for name, value in sorted(globals().items()) if name.startswith("test_")]
     failed = 0
